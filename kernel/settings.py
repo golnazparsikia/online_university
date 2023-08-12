@@ -77,8 +77,8 @@ WSGI_APPLICATION = 'kernel.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "online_university_db",
-        "USER": "online_university_user",
+        "NAME": "online_university_db_2",
+        "USER": "online_university_user2",
         "PASSWORD": "Q-V3dGx8RkKKoMwwHYO06aRglj06_V_p02cE1n7fGYQ",
         "HOST": "127.0.0.1",
         "PORT": "5432",
