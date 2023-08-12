@@ -1,0 +1,293 @@
+////////////////////////////
+//    Warehouse App       //
+////////////////////////////
+
+TableGroup warehouse {
+  warehouse.Product
+  warehouse.ProductMedia
+  warehouse.Question
+  warehouse.QuestionHelp
+  warehouse.Answer
+}
+
+Table warehouse.Product as WP {
+  id int [
+    pk,
+    increment
+  ]
+  sku varchar(100) [
+    unique,
+    not null,
+    note: "Product ID serial, maximum 50 characters"
+  ]
+  title varchar(255) [
+    not null,
+    unique,
+    note: "Product title is unique and maximum 255 characters"
+  ]
+  slug slug(255) [
+    not null,
+    unique,
+    note: "Slug is a news paper term, A short label for "
+  ]
+  parent int [
+    ref: > WP.id, null,
+    note: "Product subcategory"
+  ]
+  scope warehouse.ScopeStatus [
+    note: "Record track basin"
+  ]
+  description text [
+    null,
+    // blank,
+    note: "Text for the description of the scope"
+  ]
+  is_buyable boolean [
+    default: false,
+    note: "Can be sold or not"
+  ]
+  bundle int [
+    ref: <> WP.id,
+    // through: WBT, 
+    note: "Course connection to bootcamp"
+  ]
+  experience int [
+    not null,
+    note: "Level of satisfaction and experience"
+  ]
+  difficulty warehouse.Difficulty [
+    note: "The hardness of the product"
+  ]
+  priority int [
+    not null,
+    note: "Product prioritization"
+  ]
+  created timestamp [
+    note: "Date and time of record creation"
+  ]
+  modified timestamp [
+    note: "Date and time of record modification"
+  ]
+  note: "Product segmentation"
+}
+
+Table warehouse.ProductMedia as WPM {
+  id int [
+    pk,
+    increment
+  ]
+  sku varchar(100) [
+    unique,
+    not null,
+    note: "Product ID serial, maximum 50 characters"
+  ]
+  product int [
+    ref: > WP.id,
+    null,
+    note: "Which product does the media belong to?"
+  ]
+  picture image(100) [
+    null,
+    // // blank,
+    note: "Photo supports jpg, jpeg, png format, this field can be empty"
+  ]
+  alternate_text varchar(100) [
+    not null,
+    note: "Description of the image"
+  ]
+  width_field int [
+    null,
+    note: "Width of the picture"
+  ]
+  height_field int [
+    null,
+    note: "Height of the picture"
+  ]
+  video file(100) [
+    null,
+    // blank,
+    note: "Photo supports mp4, mov, mkv format, this field can be empty"
+  ]
+  duration float [
+    null,
+    // blank,
+    note: "The duration of the video, which can be a decimal"
+  ]
+  pdf file(100) [
+    null,
+    // blank,
+    note: "Document file that can be empty"
+  ]
+  created timestamp [
+    note: "Date and time of record creation"
+  ]
+  modified timestamp [
+    note: "Date and time of record modification"
+  ]
+  note: "Add media to product section"
+}
+
+Table warehouse.Question as WQ {
+  id int [
+    pk,
+    increment
+  ]
+  product int [
+    ref: > WP.id,
+    null,
+    note: "Product related question"
+  ]
+  text_ varchar(255) [
+    not null,
+    note: "Question text maximum 255 characters"
+  ]
+  kind warehouse.QuestionTypes [
+    note: "Question type"
+  ]
+  description text [
+    null,
+    // blank,
+    note: "Description of the question without restrictions"
+  ]
+  created timestamp [
+    note: "Date and time of record creation"
+  ]
+  modified timestamp [
+    note: "Date and time of record modification"
+  ]
+  note: "The question section is for the product"
+}
+
+Table warehouse.QuestionHelp as WQH {
+  id int [
+    pk,
+    increment
+  ]
+  question int [
+    ref: > WQ.id,
+    not null,
+    note: "Question related question help"
+  ]
+  plain_text text [
+    null,
+    // blank,
+    note: "Simple question text"
+  ]
+  html_code text [
+    null,
+    // blank,
+    note: "HTML code to display"
+  ]
+  code text [
+    null,
+    // blank,
+    note: "Question with code style"
+  ]
+  picture image(100) [
+    null,
+    // blank,
+    note: "Photo supports jpg, jpeg, png format, this field can be empty"
+  ]
+  alternate_text varchar(100) [
+    not null,
+    note: "Description of the image"
+  ]
+  width_field int [
+    null,
+    note: "Width of the picture"
+  ]
+  height_field int [
+    null,
+    note: "Height of the picture"
+  ]
+  created timestamp [
+    note: "Date and time of record creation"
+  ]
+  modified timestamp [
+    note: "Date and time of record modification"
+  ]
+  note: "Help section for questions"
+}
+
+Table warehouse.Answer as WA {
+  id int [
+    pk,
+    increment
+  ]
+  question int [
+    ref: > WQ.id,
+    not null,
+    note: "related to which question"
+  ]
+  text_ text [
+    not null,
+    note: "The text of the answer is unlimited"
+  ]
+  is_correct boolean [
+    not null,
+    note: "The correct answer to the question"
+  ]
+  priorty int [
+    unique,
+    not null,
+    note: "prioritization"
+  ]
+  order_placeholder int [
+    null,
+    // blank,
+    note: "The order of display elements"
+  ]
+  created timestamp [
+    note: "Date and time of record creation"
+  ]
+  modified timestamp [
+    note: "Date and time of record modification"
+  ]
+  note: "Write the answer according to the question"
+}
+
+// Table wawrehouse.Bootcamp.through as WBT {
+//   id int [
+//     pk,
+//     increment
+//   ]
+//   from_product int [
+//     ref: > WP.id
+//   ]
+//   to_product int [
+//     ref: > WP.id,
+//     note: "Choosing a product to be bootcamp"
+//   ]
+//   created timestamp [
+//     note: "Date and time of record creation"
+//   ]
+//   modified timestamp [
+//     note: "Date and time of record modification"
+//   ]
+//   note: "Intermediate model to connect with product model"
+// }
+
+Enum warehouse.ScopeStatus {
+  Division [note: 'دانشکده']
+  Bootcamp [note: 'بوت کمپ']
+  Course [note: 'دوره']
+  Lesson [note: 'درس']
+  Chapter [note: 'قسمت']
+  Project_  [note: 'پروژه']
+  Practice [note: 'تمرین']
+}
+
+Enum warehouse.QuestionTypes {
+  checkbox
+  radio
+  placeholder
+  conditional
+  code
+}
+
+Enum warehouse.Difficulty {
+  beginner
+  intermediate
+  advance
+  productive
+}
