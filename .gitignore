@@ -109,3 +109,5 @@ docker-compose.yml
 docs/_build/
 
 warehouse/tests/querysets/test_A.py
+cache/
+artifacts/
