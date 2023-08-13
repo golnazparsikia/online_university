@@ -7,7 +7,7 @@ from painless.models.mixins.common import (
 )
 
 
-class ProductMedia(StockUnitMixin,TimestampMixin):
+class ProductMedia(StockUnitMixin, TimestampMixin):
     #! Create picture, video, pdf_file
     product = models.ForeignKey(
         "Product",
