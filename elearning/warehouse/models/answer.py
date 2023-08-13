@@ -1,45 +1,45 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
-from painless.models.mixins import (
-    TimeStampMixin,
-    )
+from painless.models.mixins.common import TimestampMixin
 
-class Answer(TimeStampMixin):
-    id = models.AutoField(
-        primary_key=True
-        )
+
+class Answer(TimestampMixin):
     question = models.ForeignKey(
-        'Question',
+        "Question",
         on_delete=models.PROTECT,
-        null=False,
-        related_name='answers',
-        help_text='Related to which question'
+        verbose_name=_("Question"),
+        related_name="answers",
+        null=True,
+        help_text=_("Relates to the Question associated with this answer.")
     )
+
     text = models.TextField(
-        null=False,
-        help_text='The text of the answer is unlimited'
+        _("Text"),
+        help_text=_("The text of the answer.")
     )
+
     is_correct = models.BooleanField(
-        null=False,
-        help_text='The correct answer to the question'
+        _("Is Correct?"),
+        help_text=_("The correct answer to the question"),
     )
-    priority = models.IntegerField(
+
+    priority = models.PositiveIntegerField(
+        _("Priority"),
         unique=True,
-        null=False,
-        help_text='Prioritization'
+        help_text=_("Ranking items based on importance for resource"\
+                    "allocation and decision-making.")
     )
-    order_placeholder = models.IntegerField(
+
+    order_placeholder = models.PositiveIntegerField(
+        _("Display Order"),
         null=True,
         blank=True,
-        help_text='The order of display elements'
+        help_text=_("The order of displaying elements.")
     )
+
     def __str__(self):
-        return self.question
+        return f"{self.question.product.title} Question Answer"
     
     def __repr__(self):
-        return self.question
-    
-    class Meta:
-        db_table = 'warehouse_answer'
-        verbose_name = 'Answer'
-        verbose_name_plural = 'Answers'
+        return f"{self.__class__.__name__}: {self.question.product.title} Question"

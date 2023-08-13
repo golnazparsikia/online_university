@@ -1,93 +1,69 @@
-import uuid
-
 from django.db import models
-from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
 
-from painless.models.mixins import (
-    TimeStampMixin,
-    StockunitMixin,
-    TitleSlugMixin
-    )
+from painless.models.mixins.common import (
+    TitleSlugMixin,
+    StockUnitMixin,
+    TimestampMixin,
+    DescriptionMixin
+)
+from elearning.warehouse.helper.consts import (
+    SCOPE,
+    DIFFICULTY
+)
 
 
-class Product(TimeStampMixin,StockunitMixin,TitleSlugMixin):
-    
-    id = models.AutoField(
-        primary_key=True,
-        )
-    
+class Product(TitleSlugMixin,StockUnitMixin,TimestampMixin,DescriptionMixin):
     parent = models.ForeignKey(
-        'self',
-        verbose_name='Parent',
-        null=True,
+        "self",
         on_delete=models.PROTECT,
+        verbose_name=_("Parent Product"),
+        related_name="children",
+        null=True,
         blank=True,
-        # related_name='products',#!qa
-        related_name='children',
-        help_text='Product subcategory'
+        help_text=_("Refers to the main or higher-level item.")
     )
-    
+
     scope = models.CharField(
-        verbose_name='Scope',
-        max_length=255,
-        null=True,
-        help_text='Record track basin'
+        _("Product Group"),
+        max_length=20,
+        choices=SCOPE.choices,
+        help_text=_("Defines the category that this product group belongs to.")
     )
-    
-    description = models.TextField(
-        verbose_name='Description',
-        null=True,
-        blank=True,
-        help_text='Text for the description of the scope'
+
+    bundle = models.ManyToManyField(
+        "self",
+        through="Bundle"
     )
-    
+
     is_buyable = models.BooleanField(
-        verbose_name='Is Buyable',
+        _("Is Buyable"),
         default=False,
-        help_text='Can be sold or not'
+        help_text=_("Can users purchase this item?")
     )
-    
-    bundle = models.ForeignKey(
-        'self',
-        verbose_name='Bundle',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='products',
-        help_text='Course connection to bootcamp'
+
+    experience = models.FloatField(
+        _("Experience"),
+        default=0,
+        help_text=_("How users feel about using this item, often indicated by"\
+            "ratings or feedback.")
     )
-    
-    experience = models.IntegerField(
-        verbose_name='Experience',
-        null=False,
-        help_text='Level of satisfaction and experience'
-    )
-    
+
     difficulty = models.CharField(
-        verbose_name='Difficulty',
-        max_length=255,
-        null=True,
-        help_text='The hardness of the product'
+        _("Difficulty"),
+        max_length=20,
+        choices=DIFFICULTY.choices,
+        help_text=_("Indicates the level of challenge or complexity.")
     )
-    
-    priority = models.IntegerField(
-        verbose_name='Priority',
-        null=False,
-        help_text='Product prioritization'
+
+    priority = models.PositiveIntegerField(
+        _("Priority"),
+        help_text=_("Ranking items based on importance for resource"\
+                    "allocation and decision-making.")
     )
-    
-    
+
     def __str__(self):
         return self.title
-    
-    def __repr__(self):
-        return self.title
-    
-    def save(self,*args,**kwargs):
-        self.slug = slugify(self.title, allow_unicode=True)
-        super().save(*args,**kwargs)
 
-    class Meta:
-        db_table = 'warehouse_product'
-        verbose_name = 'Product'
-        verbose_name_plural = 'Products'
+    def __repr__(self):
+        return f"{self.__class__.__name__}: {self.scope}({self.title})"

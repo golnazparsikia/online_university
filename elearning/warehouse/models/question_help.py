@@ -1,63 +1,67 @@
 from django.db import models
-from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
-from painless.models.mixins import (
-    TimeStampMixin,
-    )
+from painless.models.mixins.common import TimestampMixin
 
-class QuestionHelp(TimeStampMixin):
-    id = models.AutoField(
-        primary_key=True
-        )
+
+class QuestionHelp(TimestampMixin):
+    #! create picture
     question = models.ForeignKey(
-        'Question',
-        on_delete=models.PROTECT,
-        null=False,
-        related_name='help',
-        help_text='Question related question help'
+        "Question",
+        on_delete=models.SET_NULL,
+        verbose_name=_("Question"),
+        related_name="question_helps",
+        null=True,
+        help_text=_("Relates to the Question associated with this Question Help.")     # noqa: #501
     )
-    plain_text = models.TextField(
+
+    plain_text = models.CharField(
+        _("Plain Text"),
+        max_length=255,
         null=True,
         blank=True,
-        help_text='Simple question text'
+        help_text=_("The actual text of a question asked to users")
     )
-    html_code = models.TextField(
+
+    html_code = models.CharField(
+        _("HTML Code"),
+        max_length=255,
         null=True,
         blank=True,
-        help_text='HTML code to display'
+        help_text=_("The HTML code to display")
     )
-    code = models.TextField(
+
+    code = models.CharField(
+        _("Code Style"),
+        max_length=255,
         null=True,
         blank=True,
-        help_text='Question with code style'
+        help_text=_("Question with the code style.")
     )
-    # picture = models.ImageField(
-    #     null=True,
-    #     blank=True,
-    #     upload_to='question_help/',
-    #     max_length=100,
-    #     help_text='Photo supports jpg, jpeg, png format, this field can be empty'
-    # )
+
     alternate_text = models.CharField(
+        _("Image Description"),
         max_length=100,
-        null=False,
-        help_text='Description of the image'
+        help_text=_("A description used when the main content, like an image,"\
+            "can't be shown.")
     )
-    width_field = models.IntegerField(
+
+    width_field = models.SmallIntegerField(
+        _("Picture Width"),
         null=True,
-        help_text='Width of the picture'
+        blank=True,
+        help_text=_("The horizontal size of an element, like an image, in numbers.")    # noqa: E501
     )
-    height_field = models.IntegerField(
+
+    height_field = models.SmallIntegerField(
+        _("Picture Height"),
         null=True,
-        help_text='Height of the picture'
+        blank=True,
+        help_text=_("The vertical size of an element, like an image, in numbers.")     # noqa: E501
     )
-    
+
     def __str__(self):
-        return self.question
+        return f"{self.question.product.title} Question Help"
     
     def __repr__(self):
-        return self.question
-    class Meta:
-        db_table = 'warehouse_question_help'
-        verbose_name = 'Question Help'
-        verbose_name_plural = 'Question Helps'
+        return f"{self.__class__.__name__}: {self.question.product.title}"

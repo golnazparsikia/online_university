@@ -1,6 +1,6 @@
-////////////////////////////
+/////////////////////////////
 //    Warehouse App       //
-////////////////////////////
+///////////////////////////
 
 TableGroup warehouse {
   warehouse.Product
@@ -246,26 +246,26 @@ Table warehouse.Answer as WA {
   note: "Write the answer according to the question"
 }
 
-// Table wawrehouse.Bootcamp.through as WBT {
-//   id int [
-//     pk,
-//     increment
-//   ]
-//   from_product int [
-//     ref: > WP.id
-//   ]
-//   to_product int [
-//     ref: > WP.id,
-//     note: "Choosing a product to be bootcamp"
-//   ]
-//   created timestamp [
-//     note: "Date and time of record creation"
-//   ]
-//   modified timestamp [
-//     note: "Date and time of record modification"
-//   ]
-//   note: "Intermediate model to connect with product model"
-// }
+Table wawrehouse.through as WBT {
+  id int [
+    pk,
+    increment
+  ]
+  from_product int [
+    ref: > WP.id
+  ]
+  to_product int [
+    ref: > WP.id,
+    note: "Choosing a product to be bootcamp"
+  ]
+  created timestamp [
+    note: "Date and time of record creation"
+  ]
+  modified timestamp [
+    note: "Date and time of record modification"
+  ]
+  note: "Intermediate model to connect with product model"
+}
 
 Enum warehouse.ScopeStatus {
   Division [note: 'دانشکده']
@@ -273,7 +273,7 @@ Enum warehouse.ScopeStatus {
   Course [note: 'دوره']
   Lesson [note: 'درس']
   Chapter [note: 'قسمت']
-  Project_  [note: 'پروژه']
+  Project  [note: 'پروژه']
   Practice [note: 'تمرین']
 }
 

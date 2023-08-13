@@ -1,55 +1,38 @@
-import uuid
-import enum
 from django.db import models
-from django.utils.text import slugify
-from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
-from painless.models.mixins import (
-    TimeStampMixin,
-    StockunitMixin,
-    TitleSlugMixin
-    )
+from painless.models.mixins.common import (
+    TimestampMixin,
+    DescriptionMixin
+)
+from elearning.warehouse.helper.consts import QUESTIONTYPES
 
 
-class Question(TimeStampMixin):
-
-    class QuestionTypes(models.TextChoices):
-        CHECKBOX = 'checkbox'
-        RADIO = 'radio'
-        PLACEHOLDER = 'placeholder'
-        CONDITIONAL = 'conditional'
-        CODE = 'code'
-        
-    id = models.AutoField(
-        primary_key=True
-        )
+class Question(TimestampMixin,DescriptionMixin):
     product = models.ForeignKey(
-        'Product', 
-        on_delete=models.PROTECT, 
-        null=True, 
-        related_name='questions', 
-        help_text='Product related question'
+        "Product",
+        on_delete=models.PROTECT,
+        verbose_name=_("Product"),
+        related_name="questions",
+        null=True,
+        help_text=_("Relates to the product associated with this question.")
     )
+
     text = models.CharField(
-        max_length=255, 
-        help_text='Question text maximum 255 characters'
-        )
+        _("Question text"),
+        max_length=255,
+        help_text=_("The actual text of a question asked to users.")
+    )
+
     kind = models.CharField(
-        max_length=100, 
-        choices=QuestionTypes.choices, 
-        help_text='Question type'
-        )
-    description = models.TextField(
-        null=True, 
-        blank=True, 
-        help_text='Description of the question without restrictions'
-        )
+        _("Question Type"),
+        max_length=20,
+        choices=QUESTIONTYPES.choices,
+        help_text=_("Varieties of question formats.")
+    )
+
     def __str__(self):
-        return self.kind
-    
+        return f"{self.product.title} Question"
+
     def __repr__(self):
-        return self.kind
-    class Meta:
-        db_table = 'warehouse_question'
-        verbose_name = 'Question'
-        verbose_name_plural = 'Questions'
+        return f"{self.__class__.__name__}: {self.product.title}"

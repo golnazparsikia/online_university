@@ -35,6 +35,17 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "mimesis"
+version = "10.2.1"
+description = "Mimesis: Fake Data Generator."
+optional = false
+python-versions = ">=3.8,<4.0"
+files = [
+    {file = "mimesis-10.2.1-py3-none-any.whl", hash = "sha256:282e0505ade966b723d4529801dbe9bf58e5c8df35827881dce0b42aac1de88f"},
+    {file = "mimesis-10.2.1.tar.gz", hash = "sha256:973f50648208ca6b1ef9dac056bbe9eedf7cd997db2a2d73e849c0b1a5e4bdce"},
+]
+
+[[package]]
 name = "psycopg"
 version = "3.1.10"
 description = "PostgreSQL database adapter for Python"
@@ -118,4 +129,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "c423d1f421e402169c2ac0da7ebd82f574b16b0997ef6e0498abe08c419ab3ea"
+content-hash = "6c44340078942d0421cee9a864b413cbd079f50f136737f981affeebaedee1c8"

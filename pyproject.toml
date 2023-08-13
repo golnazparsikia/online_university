@@ -11,6 +11,7 @@ python = "^3.11"
 django = "^4.2.4"
 psycopg = "^3.1.10"
 psycopg2 = "^2.9.7"
+mimesis = "^10.2.1"
 
 
 [build-system]
