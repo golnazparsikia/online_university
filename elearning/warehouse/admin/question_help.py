@@ -23,16 +23,16 @@ class QuestionHelpAdmin(admin.ModelAdmin):
             "Question Reference",
             {
                 "fields": ("question",),
-                "description": "Connect this help to a specific question for"\
-                    "better understanding."
+                "description": "Connect this help to a specific question for "
+                "better understanding."
             }
         ),
         (
             "Text and HTML help",
             {
                 "fields": ("plain_text", "html_code", "code"),
-                "description": "Provide explanations using plain text or"\
-                    "formatted HTML, along with a specified code style.",
+                "description": "Provide explanations using plain text or "
+                "formatted HTML, along with a specified code style.",
                 "classes": "collapse"
             }
         ),

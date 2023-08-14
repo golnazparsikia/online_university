@@ -21,7 +21,6 @@ class BundleAdmin(admin.ModelAdmin):
         "modified"
     )
 
-
     fields = (
         "bootcamp",
         "course",

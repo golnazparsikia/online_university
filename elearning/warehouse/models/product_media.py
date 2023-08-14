@@ -1,10 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from painless.models.mixins.common import (
-    StockUnitMixin,
-    TimestampMixin
-)
+from painless.models.mixins import StockUnitMixin, TimestampMixin
 
 
 class ProductMedia(StockUnitMixin, TimestampMixin):
@@ -15,33 +12,38 @@ class ProductMedia(StockUnitMixin, TimestampMixin):
         verbose_name=_("Product"),
         related_name="medias",
         null=True,
-        help_text=_("Relates to the product associated with this media.")
+        help_text=_("Relates to the product associated with this media."),
     )
 
     alternate_text = models.CharField(
         _("Image Description"),
         max_length=50,
-        help_text=_("A description used when the main content, like an image,"\
-            "can't be shown.")
+        help_text=_(
+            "A description used when the main content, like an image," "can't be shown."   # noqa: E501
+        ),
     )
 
     width_field = models.SmallIntegerField(
         _("Picture Width"),
         null=True,
-        help_text=_("The horizontal size of an element, like an image, in numbers.")     # noqa: E501
+        help_text=_(
+            "The horizontal size of an element, like an image, in numbers."
+        ),
     )
 
     height_field = models.SmallIntegerField(
         _("Picture Height"),
         null=True,
-        help_text=_("The vertical size of an element, like an image, in numbers.")     # noqa: E501
+        help_text=_(
+            "The vertical size of an element, like an image, in numbers."
+        ),
     )
 
     duration = models.FloatField(
         _("Duration"),
         null=True,
         blank=True,
-        help_text=_("How long something, like a video or audio, plays for.")
+        help_text=_("How long something, like a video or audio, plays for."),
     )
 
     class Meta:

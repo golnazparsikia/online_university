@@ -38,8 +38,8 @@ class ProductMediaAdmin(admin.ModelAdmin):
             {
                 "fields": ("created", "modified"),
                 "classes": ("collapse",),
-                "description": "Record the time when an item is created or"\
-                    "modified."
+                "description": "Record the time when an item is created or"
+                "modified."
             }
         )
     )

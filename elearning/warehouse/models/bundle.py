@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from painless.models.mixins.common import TimestampMixin
+from painless.models.mixins import TimestampMixin
 
 
 class Bundle(TimestampMixin):
@@ -11,7 +11,7 @@ class Bundle(TimestampMixin):
         verbose_name=_("Bootcamp"),
         related_name="bootcamps",
         null=True,
-        help_text=_("For the learning program or workshop.")
+        help_text=_("For the learning program or workshop."),
     )
 
     course = models.ForeignKey(
@@ -20,7 +20,7 @@ class Bundle(TimestampMixin):
         verbose_name=_("Course"),
         related_name="courses",
         null=True,
-        help_text=_("Pertaining to a specific subject of study.")
+        help_text=_("Pertaining to a specific subject of study."),
     )
 
     class Meta:

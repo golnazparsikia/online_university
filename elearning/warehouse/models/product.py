@@ -1,19 +1,16 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from painless.models.mixins.common import (
+from painless.models.mixins import (
     TitleSlugMixin,
     StockUnitMixin,
     TimestampMixin,
-    DescriptionMixin
+    DescriptionMixin,
 )
-from elearning.warehouse.helper.consts import (
-    SCOPE,
-    DIFFICULTY
-)
+from elearning.warehouse.helper.consts import SCOPE, DIFFICULTY
 
 
-class Product(TitleSlugMixin,StockUnitMixin,TimestampMixin,DescriptionMixin):
+class Product(TitleSlugMixin, StockUnitMixin, TimestampMixin, DescriptionMixin):      # noqa: E501
     parent = models.ForeignKey(
         "self",
         on_delete=models.PROTECT,
@@ -21,20 +18,17 @@ class Product(TitleSlugMixin,StockUnitMixin,TimestampMixin,DescriptionMixin):
         related_name="children",
         null=True,
         blank=True,
-        help_text=_("Refers to the main or higher-level item.")
+        help_text=_("Refers to the main or higher-level item."),
     )
 
     scope = models.CharField(
         _("Product Group"),
         max_length=20,
         choices=SCOPE.choices,
-        help_text=_("Defines the category that this product group belongs to.")
+        help_text=_("Defines the category that this product group belongs to."),   # noqa: E501
     )
 
-    bundle = models.ManyToManyField(
-        "self",
-        through="Bundle"
-    )
+    bundle = models.ManyToManyField("self", through="Bundle")
 
     is_buyable = models.BooleanField(
         _("Is Buyable"),
@@ -45,26 +39,32 @@ class Product(TitleSlugMixin,StockUnitMixin,TimestampMixin,DescriptionMixin):
     experience = models.FloatField(
         _("Experience"),
         default=0,
-        help_text=_("How users feel about using this item, often indicated by"\
-            "ratings or feedback.")
+        help_text=_(
+            "How users feel about using this item, often indicated by"
+            "ratings or feedback."
+        ),
     )
 
     difficulty = models.CharField(
         _("Difficulty"),
         max_length=20,
         choices=DIFFICULTY.choices,
-        help_text=_("Indicates the level of challenge or complexity.")
+        help_text=_("Indicates the level of challenge or complexity."),
     )
 
     priority = models.PositiveIntegerField(
         _("Priority"),
-        help_text=_("Ranking items based on importance for resource"\
-                    "allocation and decision-making.")
+        help_text=_(
+            "Ranking items based on importance for resource"
+            "allocation and decision-making."
+        ),
     )
 
     class Meta:
-        db_table_comment = "All division, bootcamps, courses, projects, "\
+        db_table_comment = (
+            "All division, bootcamps, courses, projects, "
             "lessons, chapters and practices save in product table."
+        )
         get_latest_by = ("created", "modified")
 
     def __str__(self):

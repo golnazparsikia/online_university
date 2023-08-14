@@ -27,8 +27,8 @@ class ProductAdmin(admin.ModelAdmin):
             "Basic Information",
             {
                 "fields": ("title", "slug", "sku", "description"),
-                "description": "Essential product details like name, link,"\
-                    "code, and description."
+                "description": "Essential product details like name, link, "
+                "code, and description."
             }
         ),
         (
@@ -36,17 +36,17 @@ class ProductAdmin(admin.ModelAdmin):
             {
                 "fields": ("parent",),
                 "classes": ("collapse",),
-                "description": "Connect related products by setting a parent"\
-                    "item."
+                "description": "Connect related products by setting a parent "
+                "item."
             },
         ),
         (
             "Product Details",
             {
-                "fields": ("scope", "is_buyable", "difficulty", "priority", "experience"),    # noqa: E501 
+                "fields": ("scope", "is_buyable", "difficulty", "priority", "experience"),    # noqa: E501
                 "classes": ("collapse",),
-                "description": "Define type, availability, and visibility of"\
-                    "the product."
+                "description": "Define type, availability, and visibility of "
+                "the product."
             },
         ),
         (
@@ -54,8 +54,8 @@ class ProductAdmin(admin.ModelAdmin):
             {
                 "fields": ("created", "modified"),
                 "classes": ("collapse",),
-                "description": "Record the time when an item is created or"\
-                    "modified."
+                "description": "Record the time when an item is created or "
+                "modified."
             },
         )
     ]
