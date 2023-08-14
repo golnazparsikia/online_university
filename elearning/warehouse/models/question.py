@@ -31,6 +31,9 @@ class Question(TimestampMixin,DescriptionMixin):
         help_text=_("Varieties of question formats.")
     )
 
+    class Meta:
+        get_latest_by = ("created", "modified")
+
     def __str__(self):
         return f"{self.product.title} Question"
 

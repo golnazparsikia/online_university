@@ -38,6 +38,11 @@ class Answer(TimestampMixin):
         help_text=_("The order of displaying elements.")
     )
 
+    class Meta:
+        db_table_comment = "Question answers."
+        get_latest_by = ("created", "modified")
+        order_with_respect_to = "question"
+
     def __str__(self):
         return f"{self.question.product.title} Question Answer"
     

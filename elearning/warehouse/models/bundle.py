@@ -23,6 +23,12 @@ class Bundle(TimestampMixin):
         help_text=_("Pertaining to a specific subject of study.")
     )
 
+    class Meta:
+        db_table_comment = "Bootcamp's courses."
+        get_latest_by = ("created", "modified")
+
+        unique_together = ("bootcamp", "course")
+
     def __str__(self):
         return f"({self.bootcamp}, {self.course})"
 

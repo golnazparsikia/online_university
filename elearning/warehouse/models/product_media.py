@@ -44,6 +44,10 @@ class ProductMedia(StockUnitMixin, TimestampMixin):
         help_text=_("How long something, like a video or audio, plays for.")
     )
 
+    class Meta:
+        db_table_comment = "Product's Media"
+        get_latest_by = ("created", "modified")
+
     def __str__(self):
         return f"{self.product.title} Media"
 

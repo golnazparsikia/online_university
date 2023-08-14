@@ -60,6 +60,11 @@ class QuestionHelp(TimestampMixin):
         help_text=_("The vertical size of an element, like an image, in numbers.")     # noqa: E501
     )
 
+    class Meta:
+        db_table_comment = "Help data for questions"
+
+        get_latest_by = ("created", "modified")
+
     def __str__(self):
         return f"{self.question.product.title} Question Help"
     

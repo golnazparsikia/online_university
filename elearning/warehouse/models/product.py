@@ -62,6 +62,11 @@ class Product(TitleSlugMixin,StockUnitMixin,TimestampMixin,DescriptionMixin):
                     "allocation and decision-making.")
     )
 
+    class Meta:
+        db_table_comment = "All division, bootcamps, courses, projects, "\
+            "lessons, chapters and practices save in product table."
+        get_latest_by = ("created", "modified")
+
     def __str__(self):
         return self.title
 
