@@ -13,7 +13,12 @@ from elearning.warehouse.models import(
     QuestionHelp,
     Answer
 )
-from elearning.warehouse.helper.consts import DIFFICULTY, QUESTIONTYPES
+from elearning.warehouse.helper.consts import (
+    DIFFICULTY,
+    QUESTIONTYPES,
+    QUESTIONTYPEANSWERSCOUNT as QTAC,
+)
+from elearning.warehouse.helper.exceptions import QuestionTypeError
 
 
 class WarehouseDataGenerator(BaseDataGenerator):
@@ -22,6 +27,32 @@ class WarehouseDataGenerator(BaseDataGenerator):
 
     def get_random_question_type(self):
         return random.choice(QUESTIONTYPES.labels)
+
+    def get_total_answer(self, question_obj):
+        question_kind = question_obj.kind
+        total_answers = getattr(QTAC, question_kind.upper()).value
+
+        return total_answers
+
+    def get_valid_is_correct(self, question_obj):
+        question_kind = question_obj.kind
+
+        if question_kind == "Checkbox":
+            is_correct = self.get_random_bool()
+
+        elif question_kind == ("Radio", "Conditional"):
+            if not question_obj.answers.filter(is_correct=True).exists():
+                is_correct = True
+            else:
+                is_correct = False
+
+        elif question_kind in ("Placeholder", "Code"):
+            is_correct = True
+
+        else:
+            QuestionTypeError(f"QuestionType from {question_obj} doesn't exists.")
+
+        return is_correct
 
     def create_products(self, total, batch_size):
         division_objs = [
@@ -249,15 +280,19 @@ class WarehouseDataGenerator(BaseDataGenerator):
         return question_helps
 
     def create_answers(self, total, batch_size):
-        #! set is correct and priority
-        answer_objs = [
-            Answer(
-                question=self.get_random_from_seq(Question.objects.all()),
-                text=self.get_random_text(1),
-                order_placeholder=self.get_random_int(total),
-            )
-            for _ in tqdm(range(total))
-        ]
+        answer_objs = list()
+        for num, question_obj in tqdm(enumerate(Question.objects.all())):
+            total_answers = self.get_total_answer(question_obj)
+            for _ in range(total_answers):
+                Answer(
+                    question=question_obj,
+                    text=self.get_random_text(1),
+                    order_placeholder=self.get_random_int(total),
+                    priority=num,
+                    is_correct=self.get_valid_is_correct(),
+                )
+                answer_objs.append(Answer)
+
         answers = Answer.objects.bulk_create(
             answer_objs,
             batch_size=batch_size,

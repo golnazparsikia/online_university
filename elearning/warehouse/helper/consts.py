@@ -1,3 +1,5 @@
+from enum import Enum
+
 from django.db import models
 
 
@@ -16,7 +18,7 @@ class QUESTIONTYPES(models.TextChoices):
     RADIO = "Radio"
     PLACEHOLDER = "Placeholder"
     CONDITIONAL = "Conditional"
-    PRACTICE = "Practice"
+    CODE = "Code"
 
 
 class DIFFICULTY(models.TextChoices):
@@ -24,3 +26,11 @@ class DIFFICULTY(models.TextChoices):
     INTERMEDIATE = "Intermediate"
     ADVANCE = "Advance"
     PRODUCTIVE = "Productive"
+
+
+class QUESTIONTYPEANSWERSCOUNT(Enum):
+    CHECKBOX = 5
+    RADIO = 4
+    PLACEHOLDER = 1
+    CONDITIONAL = 2
+    CODE = 1

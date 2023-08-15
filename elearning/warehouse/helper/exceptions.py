@@ -1,0 +1,2 @@
+class QuestionTypeError(TypeError):
+    pass
