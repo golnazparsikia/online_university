@@ -10,7 +10,7 @@ from painless.models.mixins import (
 from elearning.warehouse.helper.consts import SCOPE, DIFFICULTY
 
 
-class Product(TitleSlugMixin, StockUnitMixin, TimestampMixin, DescriptionMixin):      # noqa: E501
+class Product(TitleSlugMixin, StockUnitMixin, TimestampMixin, DescriptionMixin):               # noqa: E501
     parent = models.ForeignKey(
         "self",
         on_delete=models.PROTECT,
@@ -25,7 +25,7 @@ class Product(TitleSlugMixin, StockUnitMixin, TimestampMixin, DescriptionMixin):
         _("Product Group"),
         max_length=20,
         choices=SCOPE.choices,
-        help_text=_("Defines the category that this product group belongs to."),   # noqa: E501
+        help_text=_("Defines the category that this product group belongs to."),              # noqa: E501
     )
 
     bundle = models.ManyToManyField("self", through="Bundle")
