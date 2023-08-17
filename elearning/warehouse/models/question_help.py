@@ -5,7 +5,7 @@ from painless.models.mixins import TimestampMixin
 
 
 class QuestionHelp(TimestampMixin):
-    #! create picture
+    # ! create picture
     question = models.ForeignKey(
         "Question",
         on_delete=models.SET_NULL,

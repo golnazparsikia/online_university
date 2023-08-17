@@ -5,7 +5,7 @@ from painless.models.mixins import StockUnitMixin, TimestampMixin
 
 
 class ProductMedia(StockUnitMixin, TimestampMixin):
-    #! Create picture, video, pdf_file
+    # ! Create picture, video, pdf_file
     product = models.ForeignKey(
         "Product",
         on_delete=models.PROTECT,

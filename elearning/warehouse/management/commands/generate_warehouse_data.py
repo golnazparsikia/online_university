@@ -51,7 +51,7 @@ class Command(BaseCommand):
             msg = f"{total} records are generated for each table in warehouse."
             self.show_success_msg(msg)
         except Exception as error:
-            msg = f"Problem with generating data. Check the logs"
+            msg = "Problem with generating data. Check the logs"
             self.show_error_msg(msg)
 
     def show_success_msg(self, msg: str) -> TextIO:
