@@ -73,7 +73,7 @@ class QuestionHelp(TimestampMixin):
         get_latest_by = ("created", "modified")
 
     def __str__(self):
-        return f"{self.question.product.title} Question Help"
+        return f"{self.id} Question Help"
 
     def __repr__(self):
-        return f"{self.__class__.__name__}: {self.question.product.title}"
+        return f"{self.id} Question Help"

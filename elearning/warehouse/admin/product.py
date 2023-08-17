@@ -1,12 +1,16 @@
 from django.contrib import admin
+from django.db.models import QuerySet
 
-from elearning.warehouse.models import Product
+from ..models import Product, Division
+from ..helper.consts import Scope
+from ..forms import DivisionForm
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
         "title",
+        "scope",
         "is_buyable",
         "difficulty",
         "created",
@@ -87,3 +91,13 @@ class ProductAdmin(admin.ModelAdmin):
     save_as = True
 
     date_hierarchy = "modified"
+
+
+@admin.register(Division)
+class DivisionAdmin(ProductAdmin):
+    form = DivisionForm
+
+    def get_queryset(self, request, *args, **kwargs) -> QuerySet[Division]:
+        qs = super().get_queryset(request, *args, **kwargs)
+        qs = qs.filter(scope=Scope.DIVISION)
+        return qs

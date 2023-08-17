@@ -82,8 +82,11 @@ DATABASES = {
         "PASSWORD": "Q-V3dGx8RkKKoMwwHYO06aRglj06_V_p02cE1n7fGYQ",
         "HOST": "127.0.0.1",
         "PORT": "5432",
-        },
-    }
+        "TEST": {
+            "NAME": "online_university_db_test"
+        }
+    },
+}
 
 
 # Password validation

@@ -7,7 +7,7 @@ from painless.models.mixins import (
     TimestampMixin,
     DescriptionMixin,
 )
-from elearning.warehouse.helper.consts import SCOPE, DIFFICULTY
+from elearning.warehouse.helper.consts import Scope, Difficulty
 
 
 class Product(TitleSlugMixin, StockUnitMixin, TimestampMixin, DescriptionMixin):               # noqa: E501
@@ -24,7 +24,7 @@ class Product(TitleSlugMixin, StockUnitMixin, TimestampMixin, DescriptionMixin):
     scope = models.CharField(
         _("Product Group"),
         max_length=20,
-        choices=SCOPE.choices,
+        choices=Scope.choices,
         help_text=_("Defines the category that this product group belongs to."),              # noqa: E501
     )
 
@@ -48,7 +48,7 @@ class Product(TitleSlugMixin, StockUnitMixin, TimestampMixin, DescriptionMixin):
     difficulty = models.CharField(
         _("Difficulty"),
         max_length=20,
-        choices=DIFFICULTY.choices,
+        choices=Difficulty.choices,
         help_text=_("Indicates the level of challenge or complexity."),
     )
 
@@ -72,3 +72,11 @@ class Product(TitleSlugMixin, StockUnitMixin, TimestampMixin, DescriptionMixin):
 
     def __repr__(self):
         return f"{self.__class__.__name__}: {self.scope}({self.title})"
+
+
+class Division(Product):
+    class Meta:
+        proxy = True
+        verbose_name = _("Division")
+        verbose_name_plural = _("Divisions")
+

@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from painless.models.mixins import TimestampMixin, DescriptionMixin
-from elearning.warehouse.helper.consts import QUESTIONTYPES
+from elearning.warehouse.helper.consts import QuestionType
 
 
 class Question(TimestampMixin, DescriptionMixin):
@@ -24,7 +24,7 @@ class Question(TimestampMixin, DescriptionMixin):
     kind = models.CharField(
         _("Question Type"),
         max_length=20,
-        choices=QUESTIONTYPES.choices,
+        choices=QuestionType.choices,
         help_text=_("Varieties of question formats."),
     )
 

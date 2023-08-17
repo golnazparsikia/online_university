@@ -1,4 +1,4 @@
-from .product import Product
+from .product import Product, Division
 from .bundle import Bundle
 from .product_media import ProductMedia
 from .question import Question

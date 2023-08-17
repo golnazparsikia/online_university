@@ -88,7 +88,10 @@ class WarehouseDataGenerator(BaseDataGenerator):
 
         return is_correct
 
-    def create_products(self, total: int, batch_size: int) -> ProductQuerySet:
+    def create_products(self,
+                        total: int,
+                        batch_size: int,
+                        disable_progress_bar: bool=False) -> ProductQuerySet:
         """
         Generate and create fake product data.
 
@@ -114,7 +117,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 experience=self.get_random_float(1, 5),
                 priority=self.get_random_int(1, total),
             )
-            for _ in tqdm(range(10))
+            for _ in tqdm(range(10), disable=disable_progress_bar)
             if (words := self.get_random_words(3))
         ]
         divisions = Product.objects.bulk_create(
@@ -135,7 +138,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 experience=self.get_random_float(1, 5),
                 priority=self.get_random_int(1, total),
             )
-            for _ in tqdm(range(total // 20))
+            for _ in tqdm(range(total // 20), disable=disable_progress_bar)
             if (words := self.get_random_words(3))
         ]
         bootcamps = Product.objects.bulk_create(
@@ -156,7 +159,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 experience=self.get_random_float(1, 5),
                 priority=self.get_random_int(1, total),
             )
-            for _ in tqdm(range(total // 5))
+            for _ in tqdm(range(total // 5), disable=disable_progress_bar)
             if (words := self.get_random_words(3))
         ]
         courses = Product.objects.bulk_create(
@@ -177,7 +180,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 experience=self.get_random_float(1, 5),
                 priority=self.get_random_int(1, total),
             )
-            for _ in tqdm(range(total // 20))
+            for _ in tqdm(range(total // 20), disable=disable_progress_bar)
             if (words := self.get_random_words(3))
         ]
         projects = Product.objects.bulk_create(
@@ -198,7 +201,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 experience=self.get_random_float(1, 5),
                 priority=self.get_random_int(1, total),
             )
-            for _ in tqdm(range(total // 3))
+            for _ in tqdm(range(total // 3), disable=disable_progress_bar)
             if (words := self.get_random_words(3))
         ]
         lessons = Product.objects.bulk_create(
@@ -219,7 +222,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 experience=self.get_random_float(1, 5),
                 priority=self.get_random_int(1, total),
             )
-            for _ in tqdm(range(total // 3))
+            for _ in tqdm(range(total // 3), disable=disable_progress_bar)
             if (words := self.get_random_words(3))
         ]
         chapters = Product.objects.bulk_create(
@@ -240,7 +243,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 experience=self.get_random_float(1, 5),
                 priority=self.get_random_int(1, total),
             )
-            for _ in tqdm(range(total // 4))
+            for _ in tqdm(range(total // 4), disable=disable_progress_bar)
             if (words := self.get_random_words(3))
         ]
         practices = Product.objects.bulk_create(
@@ -275,7 +278,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 bootcamp=self.get_random_from_seq(bootcamps),
                 course=self.get_random_from_seq(courses),
             )
-            for _ in tqdm(range(total))
+            for _ in tqdm(range(total), disable=disable_progress_bar)
         ]
         bundles = Bundle.objects.bulk_create(
             bundle_objs,
@@ -311,7 +314,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 height_field=self.get_random_int(50, 800),
                 duration=self.get_random_float(1, 60),
             )
-            for _ in tqdm(range(total))
+            for _ in tqdm(range(total), disable=disable_progress_bar)
         ]
         product_medias = ProductMedia.objects.bulk_create(
             product_media_objs, batch_size=batch_size
@@ -320,7 +323,10 @@ class WarehouseDataGenerator(BaseDataGenerator):
         return product_medias
 
     def create_questions(
-        self, total: int, batch_size: int
+        self,
+        total: int,
+        batch_size: int,
+        disable_progress_bar: bool=False
     ) -> QuestionQuerySet:
         """
         Generate and create fake question data.
@@ -344,7 +350,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 kind=self.get_random_question_type(),
                 description=self.get_random_text(6),
             )
-            for _ in tqdm(range(total))
+            for _ in tqdm(range(total), disable=disable_progress_bar)
         ]
         questions = Question.objects.bulk_create(
             question_objs,
@@ -354,7 +360,10 @@ class WarehouseDataGenerator(BaseDataGenerator):
         return questions
 
     def create_question_helps(
-        self, total: int, batch_size: int
+        self,
+        total: int,
+        batch_size: int,
+        disable_progress_bar: bool=False
     ) -> QuestionHelpQuerySet:
         """
         Generate and create fake question help data.
@@ -379,7 +388,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 width_field=self.get_random_int(50, 800),
                 height_field=self.get_random_int(50, 800),
             )
-            for _ in tqdm(range(total))
+            for _ in tqdm(range(total), disable=disable_progress_bar)
         ]
         question_helps = QuestionHelp.objects.bulk_create(
             question_help_objs,
@@ -408,7 +417,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
         priority_counter = 0
 
         # Iterate on all Question objects.
-        for question_obj in tqdm(questions):
+        for question_obj in tqdm(questions, disable=disable_progress_bar):
             # How many answers should a question has.
             total_answers = self.get_total_answer(question_obj)
             for _ in range(total_answers):
