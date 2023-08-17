@@ -40,7 +40,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
         if question_kind == "Checkbox":
             is_correct = self.get_random_bool()
 
-        elif question_kind == ("Radio", "Conditional"):
+        elif question_kind in ("Radio", "Conditional"):
             if not question_obj.answers.filter(is_correct=True).exists():
                 is_correct = True
             else:
@@ -68,7 +68,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 experience=self.get_random_float(1, 5),
                 priority=self.get_random_int(1, total)
             )
-            for _ in tqdm(range(10)) if (words := self.get_random_text())
+            for _ in tqdm(range(10)) if (words := self.get_random_words(3))
         ]
         divisions = Product.objects.bulk_create(
             division_objs,
@@ -88,8 +88,8 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 experience=self.get_random_float(1, 5),
                 priority=self.get_random_int(1, total)
             )
-            for _ in tqdm(range(range//20))
-            if (words := self.get_random_text())
+            for _ in tqdm(range(total//20))
+            if (words := self.get_random_words(3))
         ]
         bootcamps = Product.objects.bulk_create(
             bootcamp_objs,
@@ -109,7 +109,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 experience=self.get_random_float(1, 5),
                 priority=self.get_random_int(1, total)
             )
-            for _ in tqdm(range(range//5)) if (words := self.get_random_text())
+            for _ in tqdm(range(total//5)) if (words := self.get_random_words(3))
         ]
         courses = Product.objects.bulk_create(
             course_objs,
@@ -129,8 +129,8 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 experience=self.get_random_float(1, 5),
                 priority=self.get_random_int(1, total)
             )
-            for _ in tqdm(range(range//20))
-            if (words := self.get_random_text())
+            for _ in tqdm(range(total//20))
+            if (words := self.get_random_words(3))
         ]
         projects = Product.objects.bulk_create(
             project_objs,
@@ -150,7 +150,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 experience=self.get_random_float(1, 5),
                 priority=self.get_random_int(1, total)
             )
-            for _ in tqdm(range(range//3)) if (words := self.get_random_text())
+            for _ in tqdm(range(total//3)) if (words := self.get_random_words(3))
         ]
         lessons = Product.objects.bulk_create(
             lesson_objs,
@@ -170,7 +170,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 experience=self.get_random_float(1, 5),
                 priority=self.get_random_int(1, total)
             )
-            for _ in tqdm(range(range//3)) if (words := self.get_random_text())
+            for _ in tqdm(range(total//3)) if (words := self.get_random_words(3))
         ]
         chapters = Product.objects.bulk_create(
             chapter_objs,
@@ -190,7 +190,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 experience=self.get_random_float(1, 5),
                 priority=self.get_random_int(1, total)
             )
-            for _ in tqdm(range(range//4)) if (words := self.get_random_text())
+            for _ in tqdm(range(total//4)) if (words := self.get_random_words(3))
         ]
         practices = Product.objects.bulk_create(
             practice_objs,
@@ -230,7 +230,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
             ProductMedia(
                 product=self.get_random_from_seq(Product.objects.all()),
                 sku=self.get_random_sku(),
-                alternate_text=self.get_random_words(5),
+                alternate_text=self.get_random_words(3),
                 width_field=self.get_random_int(50, 800),
                 height_field=self.get_random_int(50, 800),
                 duration=self.get_random_float(1, 60)
@@ -248,7 +248,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
         question_objs = [
             Question(
                 product=self.get_random_from_seq(Product.objects.all()),
-                text=self.get_random_text(4),
+                text=self.get_random_words(4),
                 kind=self.get_random_question_type(),
                 description=self.get_random_text(6)
             )
@@ -265,7 +265,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
         question_help_objs = [
             QuestionHelp(
                 question=self.get_random_from_seq(Question.objects.all()),
-                plain_text=self.get_random_text(4),
+                plain_text=self.get_random_words(4),
                 alternate_text=self.get_random_words(5),
                 width_field=self.get_random_int(50, 800),
                 height_field=self.get_random_int(50, 800),
@@ -281,17 +281,21 @@ class WarehouseDataGenerator(BaseDataGenerator):
 
     def create_answers(self, total, batch_size):
         answer_objs = list()
-        for num, question_obj in tqdm(enumerate(Question.objects.all())):
+
+        priority_counter = 0
+        for question_obj in tqdm(Question.objects.all()):
             total_answers = self.get_total_answer(question_obj)
             for _ in range(total_answers):
-                Answer(
+                answer = Answer(
                     question=question_obj,
-                    text=self.get_random_text(1),
-                    order_placeholder=self.get_random_int(total),
-                    priority=num,
-                    is_correct=self.get_valid_is_correct(),
+                    text=self.get_random_words(3),
+                    order_placeholder=self.get_random_int(1, total),
+                    priority=priority_counter,
+                    is_correct=self.get_valid_is_correct(question_obj),
                 )
-                answer_objs.append(Answer)
+                answer_objs.append(answer)
+
+                priority_counter += 1
 
         answers = Answer.objects.bulk_create(
             answer_objs,

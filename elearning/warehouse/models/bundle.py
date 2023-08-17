@@ -27,7 +27,7 @@ class Bundle(TimestampMixin):
         db_table_comment = "Bootcamp's courses."
         get_latest_by = ("created", "modified")
 
-        unique_together = ("bootcamp", "course")
+        # unique_together = ("bootcamp", "course")
 
     def __str__(self):
         return f"({self.bootcamp}, {self.course})"
