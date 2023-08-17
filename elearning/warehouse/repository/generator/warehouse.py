@@ -31,13 +31,20 @@ from elearning.warehouse.helper.exceptions import QuestionTypeError
 
 
 class WarehouseDataGenerator(BaseDataGenerator):
+    """
+    A class responsible for generating fake data for warehouse tables.
+    Inherits from BaseDataGenerator for data generation utilities.
+    """
     def get_random_difficulty(self) -> str:
+        """Return a randomly chosen difficulty level."""
         return random.choice(DIFFICULTY.labels)
 
     def get_random_question_type(self) -> str:
+        """Return a randomly chosen question type."""
         return random.choice(QUESTIONTYPES.labels)
 
     def get_total_answer(self, question_obj: Question) -> int:
+        """Return the total number of answers based on the question's type."""
         question_kind = question_obj.kind
         answers_quantity = getattr(QTAC, question_kind.upper()).value
 
@@ -46,6 +53,18 @@ class WarehouseDataGenerator(BaseDataGenerator):
     def get_valid_is_correct(
         self, question_obj: Question
     ) -> bool | QuestionTypeError:
+        """
+        Determine whether an answer is correct or not based on the question
+        type. It ensures the logic of handling the truthiness of each specific
+        question's answers.
+
+        Args:
+            question_obj (Question): The question object.
+
+        Returns:
+            bool | QuestionTypeError: Boolean indicating correctness or
+            QuestionTypeError if there's a type error.
+        """
         question_kind = question_obj.kind
 
         if question_kind == "Checkbox":
@@ -68,6 +87,18 @@ class WarehouseDataGenerator(BaseDataGenerator):
         return is_correct
 
     def create_products(self, total: int, batch_size: int) -> ProductQuerySet:
+        """
+        Generate and create fake product data.
+
+        Each scope is initiated and created separately, so it would be possible
+        to handle parent fields for each scope.
+        Args:
+            total (int): Total number of products to generate.
+            batch_size (int): Batch size for bulk creation.
+
+        Returns:
+            ProductQuerySet: List of all generated Product objects.
+        """
         division_objs: List[Product] = [
             Product(
                 title=words,
@@ -221,6 +252,19 @@ class WarehouseDataGenerator(BaseDataGenerator):
         ]
 
     def create_bundles(self, total: int, batch_size: int) -> BundleQuerySet:
+        """
+        Generate and create fake bundle data.
+
+        The "bootcamp" and "course" fields are received randomly from products 
+        with the "Bootcamp" and "Course" scopes, respectively.
+
+        Args:
+            total (int): Total number of bundles to generate.
+            batch_size (int): Batch size for bulk creation.
+
+        Returns:
+            BundleQuerySet: List of generated Bundle objects.
+        """
         bootcamps = Product.objects.filter(scope="Bootcamp")
         courses = Product.objects.filter(scope="Course")
 
@@ -241,6 +285,19 @@ class WarehouseDataGenerator(BaseDataGenerator):
     def create_product_medias(
         self, total: int, batch_size: int
     ) -> ProductMediaQuerySet:
+        """
+        Generate and create fake product media data.
+
+        Product foreign keys are randomly retrieved from a queryset that
+        contains records from the product table.
+
+        Args:
+            total (int): Total number of product media items to generate.
+            batch_size (int): Batch size for bulk creation.
+
+        Returns:
+            ProductMediaQuerySet: List of generated ProductMedia objects.
+        """
         products = Product.objects.all()
 
         product_media_objs: List[ProductMedia] = [
@@ -263,6 +320,19 @@ class WarehouseDataGenerator(BaseDataGenerator):
     def create_questions(
         self, total: int, batch_size: int
     ) -> QuestionQuerySet:
+        """
+        Generate and create fake question data.
+
+        Product foreign keys are randomly retrieved from a queryset that
+        contains records from the product table.
+
+        Args:
+            total (int): Total number of questions to generate.
+            batch_size (int): Batch size for bulk creation.
+
+        Returns:
+            QuestionQuerySet: List of generated Question objects.
+        """
         products = Product.objects.all()
 
         question_objs: List[Question] = [
@@ -284,6 +354,19 @@ class WarehouseDataGenerator(BaseDataGenerator):
     def create_question_helps(
         self, total: int, batch_size: int
     ) -> QuestionHelpQuerySet:
+        """
+        Generate and create fake question help data.
+
+        Question foreign keys are randomly retrieved from a queryset that
+        contains records from the query table.
+
+        Args:
+            total (int): Total number of question helps to generate.
+            batch_size (int): Batch size for bulk creation.
+
+        Returns:
+            QuestionHelpQuerySet: List of generated QuestionHelp objects.
+        """
         questions = Question.objects.all()
 
         question_help_objs: List[QuestionHelp] = [
@@ -304,6 +387,19 @@ class WarehouseDataGenerator(BaseDataGenerator):
         return question_helps
 
     def create_answers(self, total: int, batch_size: int) -> AnswerQuerySet:
+        """
+        Generate and create fake answer data.
+
+        Question foreign keys are randomly retrieved from a queryset that
+        contains records from the query table.
+
+        Args:
+            total (int): Total number of answers to generate.
+            batch_size (int): Batch size for bulk creation.
+
+        Returns:
+            AnswerQuerySet: List of generated Answer objects.
+        """
         questions = Question.objects.all()
 
         answer_objs: List[Answer] = list()
