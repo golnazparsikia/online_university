@@ -1,40 +1,51 @@
 import random
+from typing import List
 
 from tqdm import tqdm
 
 from django.utils.text import slugify
 
 from painless.repository.generator import BaseDataGenerator
-from elearning.warehouse.models import(
+from elearning.warehouse.models import (
     Product,
     Bundle,
     ProductMedia,
     Question,
     QuestionHelp,
-    Answer
+    Answer,
 )
 from elearning.warehouse.helper.consts import (
     DIFFICULTY,
     QUESTIONTYPES,
     QUESTIONTYPEANSWERSCOUNT as QTAC,
 )
+from elearning.warehouse.helper.type_hints import (
+    ProductQuerySet,
+    BundleQuerySet,
+    ProductMediaQuerySet,
+    QuestionQuerySet,
+    QuestionHelpQuerySet,
+    AnswerQuerySet,
+)
 from elearning.warehouse.helper.exceptions import QuestionTypeError
 
 
 class WarehouseDataGenerator(BaseDataGenerator):
-    def get_random_difficulty(self):
+    def get_random_difficulty(self) -> str:
         return random.choice(DIFFICULTY.labels)
 
-    def get_random_question_type(self):
+    def get_random_question_type(self) -> str:
         return random.choice(QUESTIONTYPES.labels)
 
-    def get_total_answer(self, question_obj):
+    def get_total_answer(self, question_obj: Question) -> int:
         question_kind = question_obj.kind
-        total_answers = getattr(QTAC, question_kind.upper()).value
+        answers_quantity = getattr(QTAC, question_kind.upper()).value
 
-        return total_answers
+        return answers_quantity
 
-    def get_valid_is_correct(self, question_obj):
+    def get_valid_is_correct(
+        self, question_obj: Question
+    ) -> bool | QuestionTypeError:
         question_kind = question_obj.kind
 
         if question_kind == "Checkbox":
@@ -50,12 +61,14 @@ class WarehouseDataGenerator(BaseDataGenerator):
             is_correct = True
 
         else:
-            QuestionTypeError(f"QuestionType from {question_obj} doesn't exists.")
+            QuestionTypeError(
+                f"QuestionType from {question_obj} doesn't exists."
+            )
 
         return is_correct
 
-    def create_products(self, total, batch_size):
-        division_objs = [
+    def create_products(self, total: int, batch_size: int) -> ProductQuerySet:
+        division_objs: List[Product] = [
             Product(
                 title=words,
                 slug=slugify(words),
@@ -66,16 +79,17 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 is_buyable=False,
                 description=self.get_random_text(6),
                 experience=self.get_random_float(1, 5),
-                priority=self.get_random_int(1, total)
+                priority=self.get_random_int(1, total),
             )
-            for _ in tqdm(range(10)) if (words := self.get_random_words(3))
+            for _ in tqdm(range(10))
+            if (words := self.get_random_words(3))
         ]
         divisions = Product.objects.bulk_create(
             division_objs,
             batch_size=batch_size
         )
 
-        bootcamp_objs = [
+        bootcamp_objs: List[Product] = [
             Product(
                 title=words,
                 slug=slugify(words),
@@ -86,9 +100,9 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 is_buyable=self.get_random_bool(),
                 description=self.get_random_text(6),
                 experience=self.get_random_float(1, 5),
-                priority=self.get_random_int(1, total)
+                priority=self.get_random_int(1, total),
             )
-            for _ in tqdm(range(total//20))
+            for _ in tqdm(range(total // 20))
             if (words := self.get_random_words(3))
         ]
         bootcamps = Product.objects.bulk_create(
@@ -96,7 +110,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
             batch_size=batch_size
         )
 
-        course_objs = [
+        course_objs: List[Product] = [
             Product(
                 title=words,
                 slug=slugify(words),
@@ -107,16 +121,17 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 is_buyable=True,
                 description=self.get_random_text(6),
                 experience=self.get_random_float(1, 5),
-                priority=self.get_random_int(1, total)
+                priority=self.get_random_int(1, total),
             )
-            for _ in tqdm(range(total//5)) if (words := self.get_random_words(3))
+            for _ in tqdm(range(total // 5))
+            if (words := self.get_random_words(3))
         ]
         courses = Product.objects.bulk_create(
             course_objs,
             batch_size=batch_size
         )
 
-        project_objs = [
+        project_objs: List[Product] = [
             Product(
                 title=words,
                 slug=slugify(words),
@@ -127,9 +142,9 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 is_buyable=False,
                 description=self.get_random_text(6),
                 experience=self.get_random_float(1, 5),
-                priority=self.get_random_int(1, total)
+                priority=self.get_random_int(1, total),
             )
-            for _ in tqdm(range(total//20))
+            for _ in tqdm(range(total // 20))
             if (words := self.get_random_words(3))
         ]
         projects = Product.objects.bulk_create(
@@ -137,7 +152,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
             batch_size=batch_size
         )
 
-        lesson_objs = [
+        lesson_objs: List[Product] = [
             Product(
                 title=words,
                 slug=slugify(words),
@@ -148,16 +163,17 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 is_buyable=False,
                 description=self.get_random_text(6),
                 experience=self.get_random_float(1, 5),
-                priority=self.get_random_int(1, total)
+                priority=self.get_random_int(1, total),
             )
-            for _ in tqdm(range(total//3)) if (words := self.get_random_words(3))
+            for _ in tqdm(range(total // 3))
+            if (words := self.get_random_words(3))
         ]
         lessons = Product.objects.bulk_create(
             lesson_objs,
             batch_size=batch_size
         )
 
-        chapter_objs = [
+        chapter_objs: List[Product] = [
             Product(
                 title=words,
                 slug=slugify(words),
@@ -168,16 +184,17 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 is_buyable=self.get_random_bool(),
                 description=self.get_random_text(6),
                 experience=self.get_random_float(1, 5),
-                priority=self.get_random_int(1, total)
+                priority=self.get_random_int(1, total),
             )
-            for _ in tqdm(range(total//3)) if (words := self.get_random_words(3))
+            for _ in tqdm(range(total // 3))
+            if (words := self.get_random_words(3))
         ]
         chapters = Product.objects.bulk_create(
             chapter_objs,
             batch_size=batch_size
         )
 
-        practice_objs = [
+        practice_objs: List[Product] = [
             Product(
                 title=words,
                 slug=slugify(words),
@@ -188,33 +205,29 @@ class WarehouseDataGenerator(BaseDataGenerator):
                 is_buyable=self.get_random_bool(),
                 description=self.get_random_text(6),
                 experience=self.get_random_float(1, 5),
-                priority=self.get_random_int(1, total)
+                priority=self.get_random_int(1, total),
             )
-            for _ in tqdm(range(total//4)) if (words := self.get_random_words(3))
+            for _ in tqdm(range(total // 4))
+            if (words := self.get_random_words(3))
         ]
         practices = Product.objects.bulk_create(
             practice_objs,
             batch_size=batch_size
         )
 
-        return [divisions
-                + bootcamps
-                + courses
-                + projects
-                + lessons
-                + chapters
-                + practices
-                ]
+        return [
+            divisions + bootcamps + courses + projects + lessons + chapters
+            + practices
+        ]
 
-    def create_bundles(self, total, batch_size):
-        bundle_objs = [
+    def create_bundles(self, total: int, batch_size: int) -> BundleQuerySet:
+        bootcamps = Product.objects.filter(scope="Bootcamp")
+        courses = Product.objects.filter(scope="Course")
+
+        bundle_objs: List[Bundle] = [
             Bundle(
-                bootcamp =self.get_random_from_seq(
-                    Product.objects.filter(scope="Bootcamp")
-                ),
-                course=self.get_random_from_seq(
-                    Product.objects.filter(scope="Course")
-                ),
+                bootcamp=self.get_random_from_seq(bootcamps),
+                course=self.get_random_from_seq(courses),
             )
             for _ in tqdm(range(total))
         ]
@@ -225,32 +238,39 @@ class WarehouseDataGenerator(BaseDataGenerator):
 
         return bundles
 
-    def create_product_medias(self, total, batch_size):
-        product_media_objs = [
+    def create_product_medias(
+        self, total: int, batch_size: int
+    ) -> ProductMediaQuerySet:
+        products = Product.objects.all()
+
+        product_media_objs: List[ProductMedia] = [
             ProductMedia(
-                product=self.get_random_from_seq(Product.objects.all()),
+                product=self.get_random_from_seq(products),
                 sku=self.get_random_sku(),
                 alternate_text=self.get_random_words(3),
                 width_field=self.get_random_int(50, 800),
                 height_field=self.get_random_int(50, 800),
-                duration=self.get_random_float(1, 60)
+                duration=self.get_random_float(1, 60),
             )
             for _ in tqdm(range(total))
         ]
         product_medias = ProductMedia.objects.bulk_create(
-            product_media_objs,
-            batch_size=batch_size
+            product_media_objs, batch_size=batch_size
         )
 
         return product_medias
 
-    def create_questions(self, total, batch_size):
-        question_objs = [
+    def create_questions(
+        self, total: int, batch_size: int
+    ) -> QuestionQuerySet:
+        products = Product.objects.all()
+
+        question_objs: List[Question] = [
             Question(
-                product=self.get_random_from_seq(Product.objects.all()),
+                product=self.get_random_from_seq(products),
                 text=self.get_random_words(4),
                 kind=self.get_random_question_type(),
-                description=self.get_random_text(6)
+                description=self.get_random_text(6),
             )
             for _ in tqdm(range(total))
         ]
@@ -261,10 +281,14 @@ class WarehouseDataGenerator(BaseDataGenerator):
 
         return questions
 
-    def create_question_helps(self, total, batch_size):
-        question_help_objs = [
+    def create_question_helps(
+        self, total: int, batch_size: int
+    ) -> QuestionHelpQuerySet:
+        questions = Question.objects.all()
+
+        question_help_objs: List[QuestionHelp] = [
             QuestionHelp(
-                question=self.get_random_from_seq(Question.objects.all()),
+                question=self.get_random_from_seq(questions),
                 plain_text=self.get_random_words(4),
                 alternate_text=self.get_random_words(5),
                 width_field=self.get_random_int(50, 800),
@@ -279,11 +303,15 @@ class WarehouseDataGenerator(BaseDataGenerator):
 
         return question_helps
 
-    def create_answers(self, total, batch_size):
-        answer_objs = list()
+    def create_answers(self, total: int, batch_size: int) -> AnswerQuerySet:
+        questions = Question.objects.all()
 
+        answer_objs: List[Answer] = list()
         priority_counter = 0
-        for question_obj in tqdm(Question.objects.all()):
+
+        # Iterate on all Question objects.
+        for question_obj in tqdm(questions):
+            # How many answers should a question has.
             total_answers = self.get_total_answer(question_obj)
             for _ in range(total_answers):
                 answer = Answer(
