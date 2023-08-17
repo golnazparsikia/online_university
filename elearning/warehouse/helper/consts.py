@@ -3,7 +3,7 @@ from enum import Enum
 from django.db import models
 
 
-class SCOPE(models.TextChoices):
+class Scope(models.TextChoices):
     DIVISION = "Division"
     BOOTCAMP = "Bootcamp"
     COURSE = "Course"
@@ -13,7 +13,7 @@ class SCOPE(models.TextChoices):
     PRACTICE = "Practice"
 
 
-class QUESTIONTYPES(models.TextChoices):
+class QuestionType(models.TextChoices):
     CHECKBOX = "Checkbox"
     RADIO = "Radio"
     PLACEHOLDER = "Placeholder"
@@ -21,14 +21,14 @@ class QUESTIONTYPES(models.TextChoices):
     CODE = "Code"
 
 
-class DIFFICULTY(models.TextChoices):
+class Difficulty(models.TextChoices):
     BEGINNER = "Beginner"
     INTERMEDIATE = "Intermediate"
     ADVANCE = "Advance"
     PRODUCTIVE = "Productive"
 
 
-class QUESTIONTYPEANSWERSCOUNT(Enum):
+class QuestionTypeAnswersCount(Enum):
     CHECKBOX = 5
     RADIO = 4
     PLACEHOLDER = 1

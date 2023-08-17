@@ -15,9 +15,9 @@ from elearning.warehouse.models import (
     Answer,
 )
 from elearning.warehouse.helper.consts import (
-    DIFFICULTY,
-    QUESTIONTYPES,
-    QUESTIONTYPEANSWERSCOUNT as QTAC,
+    Difficulty,
+    QuestionType,
+    QuestionTypeAnswersCount as QTAC
 )
 from elearning.warehouse.helper.type_hints import (
     ProductQuerySet,
@@ -35,13 +35,13 @@ class WarehouseDataGenerator(BaseDataGenerator):
     A class responsible for generating fake data for warehouse tables.
     Inherits from BaseDataGenerator for data generation utilities.
     """
-    def get_random_difficulty(self) -> str:
+    def get_random_difficulty(self) -> Difficulty:
         """Return a randomly chosen difficulty level."""
-        return random.choice(DIFFICULTY.labels)
+        return random.choice(Difficulty.labels)
 
-    def get_random_question_type(self) -> str:
+    def get_random_question_type(self) -> QuestionType:
         """Return a randomly chosen question type."""
-        return random.choice(QUESTIONTYPES.labels)
+        return random.choice(QuestionType.labels)
 
     def get_total_answer(self, question_obj: Question) -> int:
         """Return the total number of answers based on the question's type."""
@@ -51,8 +51,8 @@ class WarehouseDataGenerator(BaseDataGenerator):
         return answers_quantity
 
     def get_valid_is_correct(
-        self, question_obj: Question
-    ) -> bool | QuestionTypeError:
+        self, question: Question
+    ) -> bool:
         """
         Determine whether an answer is correct or not based on the question
         type. It ensures the logic of handling the truthiness of each specific
@@ -61,27 +61,29 @@ class WarehouseDataGenerator(BaseDataGenerator):
         Args:
             question_obj (Question): The question object.
 
+        Raise:
+            QuestionTypeError if there's a type error.
+
         Returns:
             bool | QuestionTypeError: Boolean indicating correctness or
-            QuestionTypeError if there's a type error.
         """
-        question_kind = question_obj.kind
+        question_kind = question.kind
 
-        if question_kind == "Checkbox":
+        if question_kind == QuestionType.CHECKBOX:
             is_correct = self.get_random_bool()
 
-        elif question_kind in ("Radio", "Conditional"):
-            if not question_obj.answers.filter(is_correct=True).exists():
+        elif question_kind in (QuestionType.RADIO, QuestionType.CONDITIONAL):
+            if not question.answers.filter(is_correct=True).exists():
                 is_correct = True
             else:
                 is_correct = False
 
-        elif question_kind in ("Placeholder", "Code"):
+        elif question_kind in (QuestionType.PLACEHOLDER, QuestionType.CODE):
             is_correct = True
 
         else:
             QuestionTypeError(
-                f"QuestionType from {question_obj} doesn't exists."
+                f"QuestionType from {question} doesn't exists."
             )
 
         return is_correct
@@ -255,7 +257,7 @@ class WarehouseDataGenerator(BaseDataGenerator):
         """
         Generate and create fake bundle data.
 
-        The "bootcamp" and "course" fields are received randomly from products 
+        The "bootcamp" and "course" fields are received randomly from products
         with the "Bootcamp" and "Course" scopes, respectively.
 
         Args:
