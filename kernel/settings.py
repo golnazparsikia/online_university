@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'elearning.warehouse'
+    'elearning.warehouse',
+    'account.auth',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
@@ -129,3 +131,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL='account_auth.user'
+PHONENUMBER_DEFAULT_REGION = 'IR'
+PHONENUMBER_DB_FORMAT = 'NATIONAL'

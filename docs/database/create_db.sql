@@ -10,9 +10,6 @@ ALTER ROLE "online_university_user2" SET timezone TO 'UTC' ;
 
 ALTER USER "online_university_user2" CREATEDB ;
 
-GRANT ALL PRIVILEGES ON DATABASE online_university_db_2 TO "online_university_user2" ;
-
-GRANT ALL ON schema public TO "online_university_user2" ;
 
 SELECT has_schema_privilege( 'online_university_user2','public','CREATE') ;
 

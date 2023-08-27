@@ -15,6 +15,9 @@ mimesis = "^10.2.1"
 black = "^23.7.0"
 flake8 = "^6.1.0"
 tqdm = "^4.66.1"
+phonenumbers = "^8.13.19"
+django-phonenumber-field = {extras = ["phonenumbers"], version = "^7.1.0"}
+coverage = "^7.3.0"
 
 
 [build-system]
