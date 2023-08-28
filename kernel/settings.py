@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -54,21 +54,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'kernel.urls'
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
 
 WSGI_APPLICATION = 'kernel.wsgi.application'
 
@@ -121,11 +106,78 @@ USE_I18N = True
 
 USE_TZ = True
 
+# ############################### #
+#            TEMPLATES            #
+# ############################### #
+TEMPLATE_DIR="media/templates"
+TEMPLATES_DIR = os.path.join(BASE_DIR, TEMPLATE_DIR)
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [TEMPLATES_DIR],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+            'builtins': [
+                'django.templatetags.static',
+                'django.templatetags.i18n',
+            ]
+        },
+    },
+]
+
+# ############################### #
+#             STATIC              #
+# ############################### #
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATIC_DIR="media/static"
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, STATIC_DIR),
+)
+
+COLLECT_STATIC_DIR="media/collectstatic"
+STATIC_ROOT = os.path.join(
+    BASE_DIR, COLLECT_STATIC_DIR
+)
+
+MEDIA_URL="/media/"
+
+MEDIA_UPLOAD_DIR="media/uploads"
+MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_UPLOAD_DIR)
+
+
+# ############################### #
+#      INTERNATIONALIZATION       #
+# ############################### #
+
+LANGUAGES = [
+    ('en-us', 'English'),
+    ('fa', 'Persian'),
+]
+
+LANGUAGE_CODE = 'en-us'
+
+LOCALE_DIR = "locales"
+LOCALE_PATHS = (
+        os.path.join(
+            BASE_DIR,
+            LOCALE_DIR
+        ),
+    )
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
