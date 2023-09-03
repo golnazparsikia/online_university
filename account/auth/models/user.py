@@ -1,5 +1,9 @@
 import uuid
+
 import phonenumbers
+
+from django.utils.translation import gettext_lazy as _
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import (
@@ -21,6 +25,7 @@ class User(AbstractUser, TimestampMixin):
     REQUIRED_FIELDS=[]
 
     username = models.CharField(
+        _("Username"),
         max_length=14,
         unique= True,
         help_text= "_",
@@ -30,7 +35,7 @@ class User(AbstractUser, TimestampMixin):
     )
 
     phone_number = PhoneNumberField(
-        "phone number",
+        _("phone number"),
         unique= True,
         validators=[IRPhoneNumberValidator()],
         region="IR",
@@ -40,6 +45,7 @@ class User(AbstractUser, TimestampMixin):
     )
 
     secret_code = models.UUIDField(
+        _("secret code"),
         default=uuid.uuid4,
         unique=True,
         editable=False,
@@ -47,7 +53,7 @@ class User(AbstractUser, TimestampMixin):
     )
     
     email = models.EmailField(
-        "email Address",
+        _("email Address"),
         unique= False,
         null= True,
         blank=False
