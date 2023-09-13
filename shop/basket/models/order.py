@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from painless.models.mixins import TimestampMixin
 from account.auth.models.user import User
+from ..helper.consts import status
 
 class Order(TimestampMixin):
     
@@ -16,6 +17,8 @@ class Order(TimestampMixin):
     status = models.CharField(
         _("Status"),
         max_length=255,
+        choices=status.choices,
+        default=status.ACTIVE, 
         help_text=_("Current status of the order."),
         db_comment=_("Current status of the order.")
         )

@@ -3,24 +3,10 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.text import slugify
 from account.auth.models.user import User
 from elearning.warehouse.models.product import Product
-from painless.models.mixins import TimestampMixin
+from painless.models.mixins import TimestampMixin , TitleSlugMixin
 
-class Cart(TimestampMixin):
+class Cart(TimestampMixin, TitleSlugMixin):
 
-    slug = models.SlugField(
-        _("Slug"),
-        max_length=255,
-        unique=True,
-        help_text=_(
-            "A URL-friendly version of the title, typically used in"
-            "the URL to identify the content's location."
-        ),
-    )
-
-    # Useful when subclass doesn't override save.
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.user, allow_unicode=True)
-        super().save(*args, **kwargs)
 
     user = models.ForeignKey(
         User,

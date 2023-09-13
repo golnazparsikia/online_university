@@ -16,11 +16,6 @@ class ProductOrder(TimestampMixin):
         db_comment=("The cost of the product order.")
     )
 
-    is_refunded = models.BooleanField(
-        ("Is_refunded"),
-        help_text=("Indicates whether the product order has been refunded."),
-        db_comment=("Indicates whether the product order has been refunded.")
-    )
 
     order = models.ForeignKey(
         Order,

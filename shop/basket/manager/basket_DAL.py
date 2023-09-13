@@ -2,7 +2,10 @@ from django.db import models
 from ..queryset.basket_queryset import BasketQueryset
 
 class BasketDataAccessLayer(models.Manager):
-
+    """
+    Data access layer for managing baskets and orders.
+    This class provides methods for accessing and manipulating shopping carts, orders, and product orders.
+    """
     class CartDataAccessLayer(models.Manager):
         def get_query_set(self):
             return BasketQueryset(self.model, using=self._db)
