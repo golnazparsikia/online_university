@@ -2,13 +2,13 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib.auth import get_user_model
 
-# Get the User model
+
 User = get_user_model()
 
-# Register the User model with the custom admin class
+
 @admin.register(User)
 class UserAdmin(DjangoUserAdmin):
-    # Fields displayed in the list view of users
+
     list_display = (
         'phone_number',
         'email',

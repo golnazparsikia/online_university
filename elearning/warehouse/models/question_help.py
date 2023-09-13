@@ -5,7 +5,6 @@ from painless.models.mixins import TimestampMixin
 
 
 class QuestionHelp(TimestampMixin):
-    # ! create picture
     question = models.ForeignKey(
         "Question",
         on_delete=models.SET_NULL,
@@ -41,6 +40,18 @@ class QuestionHelp(TimestampMixin):
         help_text=_("Question with the code style."),
     )
 
+    picture = models.ImageField(
+        _("picture"),
+        upload_to='elearning/warehouse/questionHelp',
+        width_field='width_field',
+        height_field='height_field',
+        validators=[],
+        null=True,
+        blank=True,
+        help_text=_("Image field for questionHelp"),
+        db_comment="Image field for questionHelp"
+    )
+
     alternate_text = models.CharField(
         _("Image Description"),
         max_length=100,
@@ -50,7 +61,7 @@ class QuestionHelp(TimestampMixin):
         ),
     )
 
-    width_field = models.SmallIntegerField(
+    width_field = models.IntegerField(
         _("Picture Width"),
         null=True,
         blank=True,
@@ -59,7 +70,7 @@ class QuestionHelp(TimestampMixin):
         ),
     )
 
-    height_field = models.SmallIntegerField(
+    height_field = models.IntegerField(
         _("Picture Height"),
         null=True,
         blank=True,
@@ -68,12 +79,19 @@ class QuestionHelp(TimestampMixin):
         ),
     )
 
+    objects = models.Manager()
+
     class Meta:
-        db_table_comment = "Help data for questions"
+        verbose_name = _("Question Help")
+        verbose_name_plural = _("Question Helps")
+
+        db_table_comment = "Help section for questions."
         get_latest_by = ("created", "modified")
+
+        default_manager_name = "objects"
 
     def __str__(self):
         return f"{self.id} Question Help"
 
     def __repr__(self):
-        return f"{self.id} Question Help"
+        return f"{self.__class__.__name__}: {self.id}"

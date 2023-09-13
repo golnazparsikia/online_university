@@ -1,1 +1,9 @@
-from .product import DivisionForm
+from .product import (
+    DivisionForm,
+    BootcampForm,
+    CourseForm,
+    LessonForm,
+    ChapterForm,
+    PracticeForm,
+    ProjectForm
+)

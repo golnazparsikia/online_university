@@ -30,7 +30,7 @@ class QuestionHelpAdmin(admin.ModelAdmin):
         (
             "Text and HTML help",
             {
-                "fields": ("plain_text", "html_code", "code"),
+                "fields": ("plain_text", "picture", "html_code", "code"),
                 "description": "Provide explanations using plain text or "
                 "formatted HTML, along with a specified code style.",
                 "classes": "collapse"

@@ -25,8 +25,9 @@ Temporary Items
 ### Python ###
 ### Byte-compiled / optimized / DLL files ###
 __pycache__/
+*.cpython-311
 *.py[cod]
-
+*.cpython-311
 ### C extensions ###
 *.so
 
@@ -111,3 +112,4 @@ docs/_build/
 warehouse/tests/querysets/test_A.py
 cache/
 artifacts/
+logs/

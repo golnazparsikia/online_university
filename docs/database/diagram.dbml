@@ -1,3 +1,129 @@
+
+////////////////////////////
+//   1.1) Auth     //
+////////////////////////////
+Table auth.User as U {
+  id int [
+    pk,
+    increment
+  ]
+  username varchar [note: 'phone number validator']
+  password varchar
+  email email [
+    null
+  ]
+  phone_number varchar(15) [
+    unique,
+    not null
+  ]
+
+  first_name varchar(150) [
+    null
+  ]
+  last_name varchar(150) [
+    null
+  ]
+  is_active boolean [
+    default: true
+  ]
+  is_staff boolean [
+    default: false
+    ]
+  is_superuser boolean [
+    default: false
+  ]
+  secret_key varchar(43) [
+    unique,
+    not null
+  ]
+
+  created timestamp [
+    note: "Date and time of record creation"
+    ]
+  modified timestamp [
+    note: "Date and time of record modification"
+  ]
+  note: "User information model"
+}
+
+Table UserProfile as UP {
+  id int [
+    pk,
+    increment
+  ]
+  nickname varchar(30) [
+    null,
+    note: "Nickname of the user"
+  ]
+  is_email_verified boolean [
+    default: false,
+    note: "Email verification status"
+  ]
+  is_phone_number_verified boolean [
+    default: false,
+    note: "Phone number verification status"
+  ]
+  bio text [
+    null,
+    note: "User's bio"
+  ]
+  organization varchar(50) [
+    null,
+    note: "Organization"
+  ]
+  occupation varchar(50) [
+    null,
+    note: "Occupation"
+  ]
+  speciality varchar(30) [
+    null,
+    note: "Speciality"
+  ]
+  national_id varchar(10) [
+    null,
+    note: "National id"
+  ]
+  is_public boolean [
+    default: false,
+    note: "Is the profile visible for public to view"
+  ]
+
+  avatar image(110) [
+    note: "Avatar picture for profile"
+  ]
+  alternate_text varchar(100) [
+    not null,
+    note: "Description of the image"
+  ]
+  width_field int [
+    null,
+    note: "Width of the picture"
+  ]
+  height_field int [
+    null,
+    note: "Height of the picture"
+  ]
+  user int [
+    ref: - U.id,
+    note: "User related to profile"
+  ]
+  total_xp int [
+    default: 0,
+    note: "Total experience points gained"
+  ]
+  is_profile_complete boolean [
+    default: false,
+    note: "Completion status of the profile"
+  ]
+  created timestamp [
+    note: "Date and time of record creation"
+    ]
+  modified timestamp [
+    note: "Date and time of record modification"
+  ]
+  note: "Profile for the user"
+}
+
 /////////////////////////////
 //    Warehouse App       //
 ///////////////////////////
@@ -25,7 +151,7 @@ Table warehouse.Product as WP {
     unique,
     note: "Product title is unique and maximum 255 characters"
   ]
-  slug slug(255) [
+  slug varchar(255) [
     not null,
     unique,
     note: "Slug is a news paper term, A short label for "
@@ -290,4 +416,45 @@ Enum warehouse.Difficulty {
   intermediate
   advance
   productive
+}
+
+Table Cart {
+  id BIGINT [primary key]
+  slug VARCHAR
+  user INT [ref: - U.id]
+  product BIGINT [ref: <> WP.id]
+}
+
+Table Expense {
+  id BIGINT [primary key]
+  product int [
+    ref: > WP.id,
+    null
+  ]
+  price BIGINT
+}
+
+Table ProductOrder {
+  id BIGINT [primary key]
+  created DATETIME
+  modified DATETIME
+  cost DECIMAL
+  // cost_without_discount DECIMAL
+  is_refunded BOOLEAN
+  order BIGINT [ref: > Order.id]
+  product BIGINT [ref: > WP.id]
+}
+
+Table Order {
+  id BIGINT [primary key]
+  created DATETIME
+  modified DATETIME
+  transaction_number VARCHAR
+  status VARCHAR
+  admin_note TEXT
+  total_cost DECIMAL
+  // total_discount DECIMAL
+  // total_cost_without_discount DECIMAL
+  user INT [ref: - U.id]
+  // vouchers BIGINT
 }

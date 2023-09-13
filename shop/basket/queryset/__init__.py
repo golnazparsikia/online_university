@@ -1,2 +1,1 @@
-from .cart import CartQueryset
-from .order import OrderQueryset
+from .basket_queryset import BasketQueryset

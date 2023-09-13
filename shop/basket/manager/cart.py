@@ -1,25 +1,22 @@
 from django.db import models
-from ..models.cart import Cart
-from ..queryset.cart import CartQuerySet
+from ..queryset.cart import CartQueryset
+
 
 class CartDataAccessLayer(models.Manager):
     def get_query_set(self):
-        return CartQuerySet(self.model, using=self._db)
+        return CartQueryset(self.model, using=self._db)
 
-    def with_active_otp_count(self):
-        return self.get_query_set().with_active_otp_count()
+    def get_cart_by_id(self, cart_id):
+        return self.get_query_set().get_cart_by_id(cart_id)
 
-    def with_total_price(self):
-        return self.get_query_set().with_total_price()
+    def get_carts_for_user(self, user_id):
+        return self.get_query_set().get_carts_for_user(user_id)
 
-    def filter_by_user(self, user):
-        return self.get_query_set().filter_by_user(user)
+    def get_carts_with_product(self, product_id):
+        return self.get_query_set().get_carts_with_product(product_id)
 
-    def filter_by_product(self, product):
-        return self.get_query_set().filter_by_product(product)
+    def create_cart(self, slug, user, product):
+        return self.get_query_set().create_cart(slug, user, product)
 
-    def filter_by_active_otp_count(self, min_active_otp_count=1):
-        return self.get_query_set().filter_by_active_otp_count(min_active_otp_count)
-
-    def filter_by_total_price(self, min_total_price=0):
-        return self.get_query_set().filter_by_total_price(min_total_price)
+    def delete_cart_by_product_id(self, product_id):
+        return self.get_query_set().delete_cart_by_product_id(product_id)

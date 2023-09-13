@@ -18,10 +18,10 @@ class BaseDataGenerator:
     Attributes:
         generic (Generic): Instance of Generic for generating generic data.
         text (Text): Instance of Text for generating text data.
-        date_time (Datetime): Instance of Datetime for generating datetime data.
+        date_time (Datetime): Instance Datetime for generating datetime data.
         file (File): Instance of File for generating file-related data.
     """
-    def __init__(self, locale: str="en") -> None:
+    def __init__(self, locale: str = "en") -> None:
         """
         Initialize the BaseDataGenerator instance with the given locale.
 
@@ -55,7 +55,7 @@ class BaseDataGenerator:
         """
         return str(uuid.uuid4())
 
-    def get_random_words(self, qty: int=2) -> str:
+    def get_random_words(self, qty: int = 2) -> str:
         """
         Generate and return a string containing random words.
 
@@ -68,7 +68,7 @@ class BaseDataGenerator:
         """
         return " ".join(self.text.words(quantity=qty))
 
-    def get_random_text(self, qty: int=2) -> str:
+    def get_random_text(self, qty: int = 2) -> str:
         """
         Generate and return random text.
 
@@ -134,3 +134,15 @@ class BaseDataGenerator:
             str: A randomly generated file name.
         """
         return self.file.file_name()
+
+    def get_random_number(self) -> int:
+        """
+        Generate and return a random 12-digit number that starts with '989'.
+
+        Returns:
+            int: A random 12-digit integer.
+        """
+        prefix = '989'
+        random_digits = [random.randint(0, 9) for _ in range(9)]  # Generate 9 random digits.
+        random_number = int(prefix + ''.join(map(str, random_digits)))  # Concatenate the prefix and random digits.
+        return random_number

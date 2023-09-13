@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-import os
+
 from pathlib import Path
+from typing import Dict
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,9 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'elearning.warehouse',
-    'account.auth',
-    'phonenumber_field',
+    'elearning.warehouse'
 ]
 
 MIDDLEWARE = [
@@ -58,6 +57,39 @@ ROOT_URLCONF = 'kernel.urls'
 WSGI_APPLICATION = 'kernel.wsgi.application'
 
 
+# Logging config
+import tomllib
+import logging.handlers
+from logging.config import dictConfig
+
+from painless.utils.funcs import is_path_exist, create_dir
+
+
+TOML_LOGGING_CONFIG_PATH = BASE_DIR / "config" / "log" / "config.toml"
+try:
+    with TOML_LOGGING_CONFIG_PATH.open(mode="rb") as log_config_file:
+        log_config = tomllib.load(log_config_file)
+except FileNotFoundError as error:
+    print(f"Error: TOML log configuration file not found at {TOML_LOGGING_CONFIG_PATH}\n")
+    raise
+except Exception as error:
+    print(f"Error loading TOML log configuration: {error}\n")
+    raise
+else:
+    LOGGING_CONFIG = None
+    LOGGING = log_config
+
+    # Check or Create the dirs of log files specified in the config.
+    handlers: Dict[str, dict] = LOGGING.get("handlers", None)
+    for handler in handlers.values():
+        handler_file_path = handler.get("filename", None)
+        if handler_file_path:
+            if not is_path_exist(BASE_DIR / handler_file_path):
+                create_dir(BASE_DIR / handler_file_path)
+
+    logging.config.dictConfig(LOGGING)
+
+
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -70,7 +102,7 @@ DATABASES = {
         "HOST": "127.0.0.1",
         "PORT": "5432",
         "TEST": {
-            "NAME": "online_university_db_test"
+            "NAME": "online_university_db_test4"
         }
     },
 }
@@ -81,16 +113,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',   # noqa: E501
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',             # noqa: E501
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',            # noqa: E501
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',           # noqa: E501
     },
 ]
 
@@ -98,7 +130,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
@@ -183,6 +214,3 @@ LOCALE_PATHS = (
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL='account_auth.user'
-PHONENUMBER_DEFAULT_REGION = 'IR'
-PHONENUMBER_DB_FORMAT = 'NATIONAL'

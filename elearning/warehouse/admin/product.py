@@ -1,13 +1,34 @@
 from django.contrib import admin
 from django.db.models import QuerySet
 
-from ..models import Product, Division
-from ..helper.consts import Scope
-from ..forms import DivisionForm
+from elearning.warehouse.models import (
+    Product,
+    Division,
+    Bootcamp,
+    Course,
+    Lesson,
+    Chapter,
+    Project,
+    Practice
+)
+from elearning.warehouse.forms.product import (
+    DivisionForm,
+    BootcampForm,
+    CourseForm,
+    LessonForm,
+    ChapterForm,
+    ProjectForm,
+    PracticeForm
+)
+
+from elearning.warehouse.helper.consts import Scope
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    """
+    Admin configuration for the Product model.
+    """
     list_display = (
         "title",
         "scope",
@@ -92,12 +113,79 @@ class ProductAdmin(admin.ModelAdmin):
 
     date_hierarchy = "modified"
 
-
 @admin.register(Division)
 class DivisionAdmin(ProductAdmin):
+    """
+    Admin configuration for the Division model.
+    """
     form = DivisionForm
-
-    def get_queryset(self, request, *args, **kwargs) -> QuerySet[Division]:
-        qs = super().get_queryset(request, *args, **kwargs)
+    def get_queryset(self, request, *args,  **kwargs) -> QuerySet[Division]:
+        qs = super().get_queryset(request, *args,  **kwargs)
         qs = qs.filter(scope=Scope.DIVISION)
+        return qs
+
+@admin.register(Bootcamp)
+class BootcampAdmin(ProductAdmin):
+    """
+    Admin configuration for the Bootcamp model.
+    """
+    form = BootcampForm
+    def get_queryset(self, request, *args,  **kwargs) -> QuerySet[Bootcamp]:
+        qs = super().get_queryset(request, *args,  **kwargs)
+        qs = qs.filter(scope=Scope.BOOTCAMP)
+        return qs
+
+@admin.register(Course)
+class CourseAdmin(ProductAdmin):
+    """
+    Admin configuration for the Course model.
+    """
+    form = CourseForm
+    def get_queryset(self, request, *args,  **kwargs) -> QuerySet[Course]:
+        qs = super().get_queryset(request, *args,  **kwargs)
+        qs = qs.filter(scope=Scope.COURSE)
+        return qs
+
+@admin.register(Lesson)
+class LessonAdmin(ProductAdmin):
+    """
+    Admin configuration for the Lesson model.
+    """
+    form = LessonForm
+    def get_queryset(self, request, *args,  **kwargs) -> QuerySet[Lesson]:
+        qs = super().get_queryset(request, *args,  **kwargs)
+        qs = qs.filter(scope=Scope.LESSON)
+        return qs
+
+@admin.register(Chapter)
+class ChapterAdmin(ProductAdmin):
+    """
+    Admin configuration for the Chapter model.
+    """
+    form = ChapterForm
+    def get_queryset(self, request, *args,  **kwargs) -> QuerySet[Chapter]:
+        qs = super().get_queryset(request, *args,  **kwargs)
+        qs = qs.filter(scope=Scope.CHAPTER)
+        return qs
+
+@admin.register(Project)
+class ProjectAdmin(ProductAdmin):
+    """
+    Admin configuration for the Project model.
+    """
+    form = ProjectForm
+    def get_queryset(self, request, *args,  **kwargs) -> QuerySet[Project]:
+        qs = super().get_queryset(request, *args,  **kwargs)
+        qs = qs.filter(scope=Scope.PROJECT)
+        return qs
+
+@admin.register(Practice)
+class PracticeAdmin(ProductAdmin):
+    """
+    Admin configuration for the Practice model.
+    """
+    form = PracticeForm
+    def get_queryset(self, request, *args,  **kwargs) -> QuerySet[Practice]:
+        qs = super().get_queryset(request, *args,  **kwargs)
+        qs = qs.filter(scope=Scope.PRACTICE)
         return qs

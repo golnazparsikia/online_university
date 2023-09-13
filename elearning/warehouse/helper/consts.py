@@ -1,5 +1,3 @@
-from enum import Enum
-
 from django.db import models
 
 
@@ -26,11 +24,3 @@ class Difficulty(models.TextChoices):
     INTERMEDIATE = "Intermediate"
     ADVANCE = "Advance"
     PRODUCTIVE = "Productive"
-
-
-class QuestionTypeAnswersCount(Enum):
-    CHECKBOX = 5
-    RADIO = 4
-    PLACEHOLDER = 1
-    CONDITIONAL = 2
-    CODE = 1

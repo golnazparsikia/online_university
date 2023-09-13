@@ -5,16 +5,17 @@ from elearning.warehouse.models import ProductMedia
 
 @admin.register(ProductMedia)
 class ProductMediaAdmin(admin.ModelAdmin):
+
     list_display = (
         "product",
         "created",
         "modified"
     )
+
     list_display_links = ("product",)
 
     list_filter = (
-        "product",
-        "duration"
+        "created",
     )
 
     fieldsets = (
@@ -22,14 +23,23 @@ class ProductMediaAdmin(admin.ModelAdmin):
             "Product Information",
             {
                 "fields": ("product", "sku"),
-                "description": "Connect this media to a specific product."
+                "description": "Connect this media to a specific product.",
             },
         ),
         (
             "Media Information",
             {
-                "fields": ("alternate_text", "width_field", "height_field", "duration"),   # noqa: #501
-                "classes": ("collapse",),
+                "fields": (
+                        "picture",
+                        "video",
+                        "pdf",
+                        "alternate_text",
+                        "duration"
+                        ),
+                "classes": (
+                    "collapse",
+                    )
+                ,
                 "description": "Provide extra information about the visuals."
             }
         ),
@@ -51,9 +61,11 @@ class ProductMediaAdmin(admin.ModelAdmin):
     )
 
     search_fields = ("product",)
+
     search_help_text = "Can search by product."
 
     ordering = ("product",)
+
     sortable_by = ("product", "created", "modified")
 
     autocomplete_fields = ("product",)
@@ -61,6 +73,7 @@ class ProductMediaAdmin(admin.ModelAdmin):
     list_per_page = 50
 
     save_on_top = True
+
     save_as = True
 
     date_hierarchy = "modified"

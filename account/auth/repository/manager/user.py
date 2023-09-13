@@ -1,8 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.models import User
 
-from ..queryset.user import UserQuerySet
+
+from account.auth.repository.queryset import UserQuerySet
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -12,12 +12,10 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
-    
     def create_user(self, phone_number: str, password: str, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
         return self._create_user(phone_number, password, **extra_fields)
-    
     def create_superuser(self, phone_number: str, password: str, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
