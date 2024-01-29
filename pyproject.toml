@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "ou"
+version = "0.0.0"
+description = ""
+authors = ["Ghazale Mirbagheri <ghazale.mirbagheri@gmail.com>"]
+license = "private"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^4.2.4"
+psycopg = "^3.1.10"
+psycopg2 = "^2.9.7"
+mimesis = "^10.2.1"
+black = "^23.7.0"
+flake8 = "^6.1.0"
+tqdm = "^4.66.1"
+phonenumbers = "^8.13.19"
+django-phonenumber-field = {extras = ["phonenumbers"], version = "^7.1.0"}
+coverage = "^7.3.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
